@@ -19,7 +19,7 @@ The package with its two macros can be used by calling
 
     \usepackage{envdefx}
 
-after installing it properly, of course.
+in the preamble after installing it properly, of course.
 
 This is version 1.0 of the package
 
