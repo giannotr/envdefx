@@ -2,7 +2,7 @@
 
 This small package enhances the possibilities of users and developers
 to deal with definitions of environments by closing a gap
-in \LaTeX's repertoire of definition macros, i.e.
+in LaTeX's repertoire of definition macros, i.e.
 this package provides `\provideenvironment` that acts exactly like
 `\providecommand`, just for environments instead of control sequences.
 The argument parsing (analougusly) is the same as for `\newenvironment`.
