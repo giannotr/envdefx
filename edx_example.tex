@@ -1,0 +1,15 @@
+\documentclass{article}
+\usepackage{lipsum}
+\usepackage{envdefx}
+
+\provideenvironment{center}{\centering}{}
+\letenv{orig@center=center}
+\renewenvironment{center}{\begin{orig@center}\itshape}{\end{orig@center}}
+
+\makeatletter
+
+\begin{document}
+\begin{center}
+  \lipsum[1]
+\end{center}
+\end{document}
