@@ -1,0 +1,134 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2015 by Ruben Giannotti 
+% <ruben dot giannotti at gmx dot net>
+% -------------------------------------------------------
+% 
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either
+% version 1.3c of this license or (at your option) any
+% later version. The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions
+% of LaTeX version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Ruben Giannotti.
+%
+% This work consists of the files
+%   envdefx.dtx 
+%   envdefx.ins
+% and the derived file envdefx.sty.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{envdefx.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[2008/04/05]
+%<package>\ProvidesPackage{envdefx}
+%<*package>
+    [2015/08/27 v1.0 Extension to the environment definition tools (RG)]
+%</package>
+%
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{parskip}
+\setlength\parindent{0pt}
+\newcommand*\pkg{\textsf}
+\newcommand*\url{\texttt}
+\newcommand*\email{\texttt}
+\newcommand*{\placeholder}[1]{\(\langle\mathit{#1}\rangle\)}
+\begin{document}
+  \DocInput{envdefx.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{0}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+%
+% \changes{v1.0}{2015/08/19}{Initial version}
+%
+% \GetFileInfo{envdefx.dtx}
+%
+% \DoNotIndex{\newcommand,\newenvironment,\!,\@empty,\@gobble,\@gobbletwo}
+% \DoNotIndex{\@ifpackageloaded,\@ifpackagewith,\@ifundefined,\@namedef}
+% \DoNotIndex{\@nil,\@onlypreamble,\@tempa,\@tempb,\@tempswafalse,\def}
+% \DoNotIndex{\@tempswatrue,\^,\-,\active,\begingroup,\catcode,\@car,\@cdr}
+% \DoNotIndex{\edef,\else,\endgroup,\endinput,\expandafter,\fi,\if}
+% \DoNotIndex{\if@tempswa,\ifcase,\ifnum,\ifx,\lccode,\let,\lowercase}
+% \DoNotIndex{\MessageBreak,\next,\number,\numexpr,\or,\PackageError}
+% \DoNotIndex{\PackageWarning,\PackageWarningNoLine,\strip@prefix,\@@end}
+% \DoNotIndex{\relax,\space,\string,\DeclareOption,\ProcessOptions}
+% \DoNotIndex{\meaning,\ifdefined,\csname,\chardef,\endcsname,\protect}
+% \DoNotIndex{\input,\RequirePackage,\global,\ifcsname,\makeatother}
+% \DoNotIndex{\@makeother,\the,\toks@}
+%
+% \title{The \pkg{envdefx} package\thanks{This document
+%   corresponds to \pkg{envdefx}~\fileversion, dated \filedate.}}
+% \author{Ruben Giannotti\thanks{\email{ruben dot giannotti at gmx dot net}}}
+%
+% \maketitle
+%
+% This small package enhances the possibilities of users and developers
+% to deal with definitions of environments by closing a gap
+% in \LaTeX's repertoire of definition macros, i.e.
+% this package provides \cs{provideenvironment} that acts exactly like
+% \cs{providecommand}, just for environments instead of control sequences.
+% The argument parsing (analougusly) is the same as for \cs{newenvironment}
+% 
+% Second and last, there is \cs{letenv} which is an environment version
+% of the \cs{let} primitive. Its syntax is
+% \cs{letenv}\marg{arg1=arg2}
+% where \placeholder{arg2} is the name of the environment that will be stored
+% into an environment with the name \placeholder{arg1},
+% and the equal sign in contrast to the one in \cs{let} is \emph{not} optional.
+% (Example: |\letenv{oldcenter=center}|)
+%
+% The implementation is quite straight forward.
+%
+% \StopEventually{}
+%
+% \cs{provideenvironment} simply mimics the behaviour of \cs{providecommand}.
+% The only difference is that a wild card macro is needed (\cs{edx@v@id})
+% that can be grabbed in the case the environment to provide is alredy defined.
+%    \begin{macrocode}
+\def\provideenvironment{\@star@or@long\provide@environment}
+\def\provide@environment#1{%
+  \@ifundefined{#1}%
+   {\def\reserved@a{\new@environment{#1}}}%
+   {\def\reserved@a{\renew@environment{edx@v@id}}}%
+  \reserved@a
+}
+\def\edx@v@id{}
+%    \end{macrocode}
+% \cs{letenv} just uses the original \cs{let} to create copies of the original
+% begin and end definitions of the environment to save.
+%    \begin{macrocode}
+\def\letenv#1{\let@env#1\@nil}
+\def\let@env#1=#2\@nil{%
+  \expandafter\let\csname #1\expandafter\endcsname\csname #2\endcsname
+  \expandafter\let\csname end#1\expandafter\endcsname\csname end#2\endcsname
+}
+%    \end{macrocode}
+%\Finale
+\endinput
