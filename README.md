@@ -46,5 +46,5 @@ and the derived file envdefx.sty.
 
 To install the package:
 
- 1. run `latex blocktable.ins`
+ 1. run `latex envdefx.ins`
  2. move 'envdefx.sty' to locations where LaTeX will find it
